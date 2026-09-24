@@ -1,0 +1,7 @@
+{
+  "name": "digital-unterwegs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "node server.mjs", "check": "for f in *.js lessons/*.js; do node --check $f || exit 1; done" }
+}

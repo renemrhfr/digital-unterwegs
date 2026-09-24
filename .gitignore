@@ -1,0 +1,41 @@
+# Betriebssystem
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Lokale Tooling-Konfiguration
+.claude/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+
+# Build / Pages-Ausgabe
+_site/
+dist/
+build/
+
+# Umgebung & Geheimnisse
+.env
+.env.*
+!.env.example
+
+# Logs & Temp
+*.log
+tmp/
+.cache/
