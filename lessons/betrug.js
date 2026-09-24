@@ -21,12 +21,13 @@ export default {
     {
       id: 'nachrichten',
       title: 'Falsche SMS und WhatsApp',
-      goal: '„Hallo Mama“, Paket-SMS und Kettenbriefe',
+      goal: '„Hallo Mama“, Paket-SMS, Abstimm-Links und Kettenbriefe',
       summary: [
         'Betrugsnachrichten wollen, dass du **schnell** etwas tust: Link antippen, App installieren, Geld schicken, Code verraten.',
         'Nie über den Weg antworten, den die Nachricht vorgibt. **Selbst prüfen**: bekannte Nummer, echte App, bekannte Adresse.',
         '„Neue Nummer“ von Kind oder Enkel? **Unter der alten Nummer anrufen.**',
-        'Verdächtige SMS: nicht antworten, **blockieren und löschen**.'
+        'Verdächtige SMS: nicht antworten, **blockieren und löschen**.',
+        'Einen **Code aus SMS oder WhatsApp** tippst du nie auf einer Seite aus einem Link ein – auch nicht fürs „Abstimmen“.'
       ],
       steps: [
         {
@@ -62,6 +63,40 @@ export default {
           ok: 'Im Menü findest du „Blockieren“ oder „Spam melden“. Danach kannst du die Nachricht löschen.',
           wrong: { 'sms-call': 'Nicht zurückrufen – das kann teuer werden und zeigt, dass deine Nummer aktiv ist.' },
           other: 'Gesucht sind die drei Punkte oben rechts.'
+        },
+        {
+          ask: 'Deine Bekannte Gerti schreibt dir. Was tust du?',
+          screen: whatsappChat('Gerti', [
+            { msg: 'Hallo! 😊 Meine Enkelin Lena ist beim Tanzwettbewerb im Finale! Bitte stimm für sie ab, dauert nur eine Minute: tanz-voting-austria.com/lena', time: '16:40' },
+            { msg: 'Danke dir!! 🙏💃', time: '16:40' }
+          ], { sub: 'zuletzt online um 16:40' }),
+          options: [
+            ['Nicht antippen. Gerti anrufen und fragen, ob die Nachricht wirklich von ihr ist.', true, 'Richtig. Solche Nachrichten kommen oft von echten Bekannten, deren WhatsApp schon übernommen wurde. Ein Anruf klärt es.'],
+            ['Antippen – Gerti kenne ich ja.', false, 'Der Absender ist echt, aber am Handy sitzt vielleicht schon ein Betrüger. Das Konto von Gerti kann übernommen sein.'],
+            ['Antippen und nur schauen, was dort steht.', false, 'Die Seite ist genau dafür gebaut, dich Schritt für Schritt zum Eintippen zu bringen.']
+          ]
+        },
+        {
+          ask: 'Angenommen, du hast den Link geöffnet und deine Handynummer eingegeben. Gleich danach kommt eine SMS: „Dein WhatsApp-Code: 318-274. Gib diesen Code nicht weiter.“ Die Seite will diesen Code haben.',
+          screen: phoneBrowser('tanz-voting-austria.com/lena', [
+            { img: 'Lena beim Tanzen', tone: 'product' },
+            { h: 'Stimme für Lena abgeben', size: 'l' },
+            { field: 'Deine Handynummer', value: '+43 664 123 4567' },
+            { p: 'Damit deine Stimme zählt, bestätige sie mit dem **6-stelligen Code**, den du gerade per SMS oder WhatsApp bekommen hast.' },
+            { field: 'Bestätigungscode', placeholder: '000-000' },
+            { btn: 'Stimme bestätigen', full: true }
+          ]),
+          fredi: ['misstrauisch', 'Seit wann braucht ma zum Abstimmen an WhatsApp-Code?'],
+          options: [
+            ['Seite schließen und den Code nicht eintippen.', true, 'Richtig. Der Code hat nichts mit einer Abstimmung zu tun. Es ist der Anmelde-Code für **dein** WhatsApp. Die Betrüger haben mit deiner Nummer WhatsApp auf ihrem eigenen Handy eingerichtet und warten nur noch auf diesen Code.'],
+            ['Den Code eintippen, damit die Stimme zählt.', false, 'Damit übernimmt der Betrüger dein WhatsApp. Du fliegst hinaus, und er schreibt deinen Kontakten in deinem Namen.'],
+            ['Nur die Handynummer ist schlimm, der Code ist egal.', false, 'Umgekehrt: Die Nummer allein reicht nicht. Erst mit dem Code kommt der Betrüger in dein Konto.']
+          ]
+        },
+        {
+          show: 'So wird WhatsApp gestohlen',
+          text: 'Mit deinem Code meldet sich der Betrüger mit **deiner Nummer** in WhatsApp an. Auf deinem Handy steht dann, dass du abgemeldet wurdest. Der Betrüger schreibt nun deinen Kontakten – dieselbe Abstimmung oder „Kannst du mir schnell Geld überweisen?“. So war es vermutlich auch bei Gerti.\n\n**Schutz:** In WhatsApp unter **Einstellungen → Konto → Bestätigung in zwei Schritten** eine eigene 6-stellige PIN festlegen. Dann reicht der SMS-Code allein nicht mehr.\n\n**Wenn es passiert ist:** WhatsApp öffnen und dich mit deiner Nummer neu anmelden – dann fliegt der Betrüger hinaus. Familie und Freunde anrufen und warnen.',
+          screen: smsChat('WhatsApp', [{ msg: 'Dein WhatsApp-Code: 318-274\nGib diesen Code nicht weiter.', time: '16:43' }], { composer: null })
         },
         {
           ask: 'In der Familiengruppe wird weitergeleitet: „Billa verschenkt zum Jubiläum 500-€-Gutscheine! Hier klicken und an 10 Freunde teilen.“ Was tust du?',
