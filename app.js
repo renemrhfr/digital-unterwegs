@@ -323,5 +323,23 @@ app.addEventListener('focusout', e => showHref(e, false));
 // Der Sprunglink darf die Hash-Navigation nicht auslösen.
 document.querySelector('.skip')?.addEventListener('click', e => { e.preventDefault(); document.querySelector('#main')?.focus(); });
 
+// ---------- Bildschirm wach halten ----------
+// Wer lange liest, tippt nicht – das Tablet soll trotzdem nicht in den Ruhemodus gehen.
+// Der Browser gibt die Sperre beim Wechsel in den Hintergrund frei, daher bei Rückkehr neu anfordern.
+let wakeLock = null;
+const keepAwake = async () => {
+  if (!('wakeLock' in navigator) || wakeLock || document.visibilityState !== 'visible') return;
+  wakeLock = 'pending';
+  try {
+    const lock = await navigator.wakeLock.request('screen');
+    lock.addEventListener('release', () => { wakeLock = null; });
+    wakeLock = lock;
+  } catch { wakeLock = null; /* nicht erlaubt (z. B. Energiesparmodus) – dann eben nicht */ }
+};
+keepAwake();
+document.addEventListener('visibilitychange', keepAwake);
+// Manche Browser (v. a. Safari) erlauben es erst nach einer Berührung.
+document.addEventListener('pointerdown', keepAwake);
+
 window.addEventListener('hashchange', onRoute);
 onRoute();
